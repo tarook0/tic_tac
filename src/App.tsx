@@ -1,22 +1,30 @@
+import React from "react";
 import Board from "./game/components/Board";
 import { useGameStore } from "./game/useGameStore";
 
-
 export default function Game() {
+  // Typing the state variables from the store
   const history = useGameStore((state) => state.history);
   const setHistory = useGameStore((state) => state.setHistory);
   const currentMove = useGameStore((state) => state.currentMove);
   const setCurrentMove = useGameStore((state) => state.setCurrentMove);
-  const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
 
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+  // Derived state
+  const xIsNext: boolean = currentMove % 2 === 0;
+  const currentSquares: (string | null)[] = history[currentMove];
+
+  // Typing the `handlePlay` function
+  function handlePlay(nextSquares: (string | null)[]): void {
+    const nextHistory: (string | null)[][] = [
+      ...history.slice(0, currentMove + 1),
+      nextSquares,
+    ];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
   }
 
-  function jumpTo(nextMove) {
+  // Typing the `jumpTo` function
+  function jumpTo(nextMove: number): void {
     setCurrentMove(nextMove);
   }
 
@@ -50,8 +58,8 @@ export default function Game() {
         }}
       >
         <ol>
-          {history.map((_, historyIndex) => {
-            const description =
+          {history.map((_, historyIndex: number) => {
+            const description: string =
               historyIndex > 0
                 ? `Go to move #${historyIndex}`
                 : "Go to game start";
@@ -69,4 +77,3 @@ export default function Game() {
     </div>
   );
 }
-
