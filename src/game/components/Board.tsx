@@ -1,3 +1,4 @@
+import { useGameStore } from "../useGameStore";
 import { calculateStatus, calculateTurns, calculateWinner } from "../utils";
 import Square from "./Square";
 
@@ -9,6 +10,10 @@ interface BoardProps {
 }
 
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
+  const selectedGameType = useGameStore((state) => state.selectedGameType);
+  const setSelectedGameType = useGameStore(
+    (state) => state.setSelectedGameType
+  );
   // Typing the derived state
   const winner: string | null = calculateWinner(squares);
   const turns: number = calculateTurns(squares);
@@ -27,10 +32,34 @@ export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
     // Call the `onPlay` callback with the updated squares
     onPlay(nextSquares);
   }
+  console.log(squares);
 
   return (
     <>
-      <div style={{ width: "20%", margin: "0.5rem" }}>{status}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10rem" }}>
+        {/* Game Mode Selector */}
+        <div style={{ marginBottom: "1rem" }}>
+          <label>
+            <input
+              type="radio"
+              checked={selectedGameType === "singlePlayer"}
+              onChange={() => setSelectedGameType("singlePlayer")}
+            />
+            Single Player
+          </label>
+          <label style={{ margin: "1rem" }}>
+            <input
+              type="radio"
+              checked={selectedGameType === "multiPlayer"}
+              onChange={() => setSelectedGameType("multiPlayer")}
+            />
+            Multi Player
+          </label>
+        </div>
+
+        {/* Status Display */}
+        <div style={{ width: "100%", margin: "0.5rem" }}>{status}</div>
+      </div>{" "}
       <div
         style={{
           display: "grid",
