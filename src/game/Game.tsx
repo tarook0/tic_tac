@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Board from "./components/Board";
 import MoveHistory from "./components/MoveHistory";
 import { useGameStore } from "./useGameStore";
-import { calculateWinner, calculateTurns } from "./utils";
+import { calculateWinner } from "./utils";
 import { aiPlay } from "./ai";
 
 const AI_PLAYER = "O"; // Define the AI player
@@ -15,14 +15,13 @@ export default function Game() {
     setCurrentMove,
     gameStatus,
     selectedGameType,
-    setSelectedGameType,
   } = useGameStore();
 
   // Derived state
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
   const winner = calculateWinner(currentSquares); // Check for a winner
-  const turns = calculateTurns(currentSquares); // Calculate remaining turns
+  // const turns = calculateTurns(currentSquares); // Calculate remaining turns
 
   // Handle a player's move
   const handlePlay = (nextSquares: (string | null)[]) => {
