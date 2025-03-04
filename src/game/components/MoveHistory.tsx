@@ -1,4 +1,4 @@
-
+import React from "react";
 
 interface MoveHistoryProps {
   history: (string | null)[][];
@@ -7,16 +7,21 @@ interface MoveHistoryProps {
 
 export default function MoveHistory({ history, jumpTo }: MoveHistoryProps) {
   return (
-    <div style={{ marginLeft: "1rem", width: "200px", overflowY: "auto" }}>
-      <ol>
+    <div style={{ marginInline: "1rem", width: "auto", overflowY: "auto" }}>
+      <ol style={{ display: "grid", flexDirection: "column", gap: "8px" }}>
         {history.map((_, historyIndex) => {
           const description =
-            historyIndex > 0 ? `Go to move #${historyIndex}` : "Go to game start";
+            historyIndex > 0
+              ? `Go to move #${historyIndex}`
+              : "Go to game start";
           return (
-            <li key={historyIndex} style={{ marginBottom: 4 }}>
+            <li key={historyIndex} style={{ listStyleType: "none" }}>
               <button
                 style={{
-                  background: historyIndex === 0 ? "rebeccapurple" : "#39383b9d",
+                  background:
+                    historyIndex === 0 ? "rebeccapurple" : "#39383b9d",
+                  padding: "8px",
+                  borderRadius: "4px",
                 }}
                 onClick={() => jumpTo(historyIndex)}
               >
@@ -26,6 +31,22 @@ export default function MoveHistory({ history, jumpTo }: MoveHistoryProps) {
           );
         })}
       </ol>
+      <style>
+        {`
+          @media (max-width: 600px) {
+            div {
+              display: grid;              
+              gap: 8px;
+            }
+            ol {
+              flex-direction: row;
+              padding:0rem;
+              grid-template-columns: repeat(4, 1fr);
+              
+            }
+          }
+        `}
+      </style>
     </div>
   );
 }

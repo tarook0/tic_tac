@@ -1,6 +1,7 @@
-import { useGameStore } from "../useGameStore";
+import styled from "styled-components";
 import { calculateStatus, calculateTurns, calculateWinner } from "../utils";
 import Square from "./Square";
+import Selectore from "./Selectore";
 
 // Define the types for the props
 interface BoardProps {
@@ -9,11 +10,34 @@ interface BoardProps {
   onPlay: (nextSquares: (string | null)[]) => void; // Callback function for handling a play
 }
 
+const BoardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  border: 1px solid #999;
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 95%;
+    border: 1px solid #999;
+  }
+`;
+const StatusContainer = styled.div`
+  display: block;
+  background: #7e1e3c;
+  width: 100%;
+  flex-direction: column;
+  gap: 1rem;
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
 export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
-  const selectedGameType = useGameStore((state) => state.selectedGameType);
-  const setSelectedGameType = useGameStore(
-    (state) => state.setSelectedGameType
-  );
   // Typing the derived state
   const winner: string | null = calculateWinner(squares);
   const turns: number = calculateTurns(squares);
@@ -36,40 +60,8 @@ export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "column", gap: "10rem" }}>
-        {/* Game Mode Selector */}
-        <div style={{ marginBottom: "1rem" }}>
-          <label>
-            <input
-              type="radio"
-              checked={selectedGameType === "singlePlayer"}
-              onChange={() => setSelectedGameType("singlePlayer")}
-            />
-            Single Player
-          </label>
-          <label style={{ margin: "1rem" }}>
-            <input
-              type="radio"
-              checked={selectedGameType === "multiPlayer"}
-              onChange={() => setSelectedGameType("multiPlayer")}
-            />
-            Multi Player
-          </label>
-        </div>
-
-        {/* Status Display */}
-        <div style={{ width: "100%", margin: "0.5rem" }}>{status}</div>
-      </div>{" "}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(3, 1fr)",
-          width: "80%",
-          height: "100% ",
-          border: "1px solid #999",
-        }}
-      >
+      <Selectore status={status} />
+      <BoardContainer>
         {squares.map((_, i: number) => (
           <Square
             key={`square-${i}`}
@@ -77,7 +69,11 @@ export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
             onSquareClick={() => handleClick(i)}
           />
         ))}
-      </div>
+      </BoardContainer>
+      <StatusContainer>
+        {/* Status Display */}
+        <div style={{ width: "100%", margin: "0.5rem" }}>{status}</div>
+      </StatusContainer>
     </>
   );
 }

@@ -4,8 +4,40 @@ import MoveHistory from "./components/MoveHistory";
 import { useGameStore } from "./useGameStore";
 import { calculateWinner } from "./utils";
 import { aiPlay } from "./ai";
-
+import styled from "styled-components";
 const AI_PLAYER = "O"; // Define the AI player
+
+// Styled container for the game
+const Container = styled.div`
+     display: flex;
+    flex-direction: row;
+    font-family: monospace;
+    width: 100vw;
+    height: 100vh;
+    padding: 1rem;
+    box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* Stack vertically on mobile */
+    padding: 0rem;
+    width: 100vw;
+    height: 100vh;
+  }
+`;
+
+// Styled container for the board
+const BoardContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    align-items: start;
+    flex-direction: column;
+    height: 100vh; /* Ensure the board takes at least 50% of the screen height on mobile */
+  }
+`;
 
 export default function Game() {
   const {
@@ -60,31 +92,14 @@ export default function Game() {
   }, [currentMove, gameStatus, winner, xIsNext, selectedGameType]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        fontFamily: "monospace",
-        width: "100vw",
-        height: "100vh",
-        padding: "1rem",
-        boxSizing: "border-box",
-      }}
-    >
+    <Container>
       {/* Game Board */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <BoardContainer>
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
+      </BoardContainer>
 
       {/* Move History */}
       <MoveHistory history={history} jumpTo={setCurrentMove} />
-    </div>
+    </Container>
   );
 }
