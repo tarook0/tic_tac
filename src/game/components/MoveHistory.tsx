@@ -1,5 +1,3 @@
-import React from "react";
-
 interface MoveHistoryProps {
   history: (string | null)[][];
   jumpTo: (nextMove: number) => void;
